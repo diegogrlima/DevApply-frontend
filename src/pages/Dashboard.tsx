@@ -15,7 +15,7 @@ const stats = [
 
 export default function Dashboard() {
   return (
-    <div className="ml-64 min-h-screen bg-[#121212] p-8">
+    <div className="ml-64 min-h-screen bg-[#121212] p-8 w-full">
       <Header />
 
       <div className="flex gap-4 mb-6">
