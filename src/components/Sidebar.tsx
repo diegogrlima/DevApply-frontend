@@ -47,7 +47,10 @@ export default function Sidebar() {
       </div>
 
       <div className="p-4 border-t border-[#1a1a1a]">
-        <div className="flex items-center gap-3">
+        <Link
+          to="/perfil"
+          className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#1a1a1a] transition-colors"
+        >
           <div className="w-10 h-10 bg-[#333] rounded-full flex items-center justify-center text-white text-sm font-medium overflow-hidden">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-[#666]">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
@@ -58,9 +61,9 @@ export default function Sidebar() {
             <p className="text-[#666] text-xs">Ver perfil</p>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#666" className="w-4 h-4">
-            <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
           </svg>
-        </div>
+        </Link>
       </div>
     </aside>
   )
