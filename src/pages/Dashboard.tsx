@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom'
 import NewApplicationModal from '../components/NewApplicationModal'
 
 const applications = [
-  { company: 'Nubank', role: 'Desenvolvedor Java Júnior', stage: 'Entrevista Técnica', status: 'Em andamento', date: '13/07/2026', color: '#820AD1' },
-  { company: 'Stone', role: 'Backend Java', stage: 'Teste Técnico', status: 'Em andamento', date: '08/07/2026', color: '#1A1A1A' },
-  { company: 'iFood', role: 'Desenvolvedor Backend', stage: 'Em Análise', status: 'Em andamento', date: '05/07/2026', color: '#EA1D2C' },
-  { company: 'XP Inc.', role: 'Engenheiro de Software', stage: 'Rejeitada', status: 'Finalizada', date: '25/06/2026', color: '#000' },
-  { company: 'Ambev', role: 'Desenvolvedor Pleno', stage: 'Entrevista RH', status: 'Em andamento', date: '18/06/2026', color: '#0066CC' },
-  { company: 'C6 Bank', role: 'Analista de Sistemas', stage: 'Currículo Enviado', status: 'Em andamento', date: '14/06/2026', color: '#1A1A1A' },
+  { id: 1, company: 'Nubank', role: 'Desenvolvedor Java Júnior', stage: 'Entrevista Técnica', status: 'Em andamento', date: '13/07/2026', color: '#820AD1' },
+  { id: 2, company: 'Stone', role: 'Backend Java', stage: 'Teste Técnico', status: 'Em andamento', date: '08/07/2026', color: '#1A1A1A' },
+  { id: 3, company: 'iFood', role: 'Desenvolvedor Backend', stage: 'Em Análise', status: 'Em andamento', date: '05/07/2026', color: '#EA1D2C' },
+  { id: 4, company: 'XP Inc.', role: 'Engenheiro de Software', stage: 'Rejeitada', status: 'Finalizada', date: '25/06/2026', color: '#000' },
+  { id: 5, company: 'Ambev', role: 'Desenvolvedor Pleno', stage: 'Entrevista RH', status: 'Em andamento', date: '18/06/2026', color: '#0066CC' },
+  { id: 6, company: 'C6 Bank', role: 'Analista de Sistemas', stage: 'Currículo Enviado', status: 'Em andamento', date: '14/06/2026', color: '#1A1A1A' },
 ]
 
 const stageColors: Record<string, string> = {
@@ -20,24 +20,26 @@ const stageColors: Record<string, string> = {
   'Currículo Enviado': 'bg-[#333] text-[#888]',
 }
 
-const statusColors: Record<string, string> = {
-  'Em andamento': 'text-[#888]',
-  'Finalizada': 'text-[#888]',
-}
-
 const filters = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
 
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState('Todos')
+  const [search, setSearch] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const navigate = useNavigate()
 
   const filteredApplications = applications.filter((app) => {
-    if (activeFilter === 'Todos') return true
-    if (activeFilter === 'Em andamento') return app.status === 'Em andamento'
-    if (activeFilter === 'Aprovadas') return app.stage.includes('Aprovada')
-    if (activeFilter === 'Rejeitadas') return app.stage.includes('Rejeitada')
-    return true
+    const matchesFilter =
+      activeFilter === 'Todos' ||
+      (activeFilter === 'Em andamento' && app.status === 'Em andamento') ||
+      (activeFilter === 'Aprovadas' && app.stage.includes('Aprovada')) ||
+      (activeFilter === 'Rejeitadas' && app.stage.includes('Rejeitada'))
+
+    const matchesSearch =
+      app.company.toLowerCase().includes(search.toLowerCase()) ||
+      app.role.toLowerCase().includes(search.toLowerCase())
+
+    return matchesFilter && matchesSearch
   })
 
   const total = applications.length
@@ -60,6 +62,8 @@ export default function Dashboard() {
               <input
                 type="text"
                 placeholder="Buscar por empresa ou cargo..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
                 className="bg-[#141414] text-white text-sm pl-10 pr-4 py-2.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954] w-80"
               />
             </div>
@@ -147,8 +151,8 @@ export default function Dashboard() {
           </div>
 
           <div className="divide-y divide-[#222]">
-            {filteredApplications.map((app, index) => (
-              <div key={index} className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] transition-colors">
+            {filteredApplications.map((app) => (
+              <div key={app.id} className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] transition-colors">
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xs font-bold"
                   style={{ backgroundColor: app.color }}
@@ -163,14 +167,14 @@ export default function Dashboard() {
                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${stageColors[app.stage] || 'bg-[#333] text-[#888]'}`}>
                     {app.stage}
                   </span>
-                  <span className={`text-xs mt-1 ${statusColors[app.status]}`}>{app.status}</span>
+                  <span className="text-xs mt-1 text-[#888]">{app.status}</span>
                 </div>
                 <div className="text-right w-32">
                   <p className="text-[#888] text-sm">Aplicado em</p>
                   <p className="text-white text-sm">{app.date}</p>
                 </div>
                 <button
-                  onClick={() => navigate(`/candidatura/${index + 1}`)}
+                  onClick={() => navigate(`/candidatura/${app.id}`)}
                   className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]"
                 >
                   Ver detalhes
