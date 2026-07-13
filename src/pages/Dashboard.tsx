@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import NewApplicationModal from '../components/NewApplicationModal'
 
 const applications = [
   { company: 'Nubank', role: 'Desenvolvedor Java Júnior', stage: 'Entrevista Técnica', status: 'Em andamento', date: '13/07/2026', color: '#820AD1' },
@@ -28,6 +29,7 @@ const filters = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
 
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState('Todos')
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const navigate = useNavigate()
 
   const filteredApplications = applications.filter((app) => {
@@ -61,7 +63,10 @@ export default function Dashboard() {
                 className="bg-[#141414] text-white text-sm pl-10 pr-4 py-2.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954] w-80"
               />
             </div>
-            <button className="bg-[#1DB954] text-[#121212] px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-[#1ed760] transition-colors">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#1DB954] text-[#121212] px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-[#1ed760] transition-colors"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
@@ -180,6 +185,8 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      <NewApplicationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   )
 }
