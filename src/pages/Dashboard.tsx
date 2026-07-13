@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import NewApplicationModal from '../components/NewApplicationModal'
 
 const applications = [
   { id: 1, company: 'Nubank', role: 'Desenvolvedor Java Júnior', stage: 'Entrevista Técnica', status: 'Em andamento', date: '13/07/2026', color: '#820AD1' },
@@ -25,7 +24,6 @@ const filters = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState('Todos')
   const [search, setSearch] = useState('')
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const navigate = useNavigate()
 
   const filteredApplications = applications.filter((app) => {
@@ -68,7 +66,7 @@ export default function Dashboard() {
               />
             </div>
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => navigate('/nova-candidatura')}
               className="bg-[#1DB954] text-[#121212] px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-[#1ed760] transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
@@ -189,8 +187,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-
-      <NewApplicationModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   )
 }

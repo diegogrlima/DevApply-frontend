@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Candidaturas from './pages/Candidaturas'
 import Configuracoes from './pages/Configuracoes'
 import ApplicationDetails from './pages/ApplicationDetails'
+import NewApplication from './pages/NewApplication'
 import Sidebar from './components/Sidebar'
 
 function App() {
@@ -45,6 +46,15 @@ function App() {
           <div className="flex">
             <Sidebar />
             <ApplicationDetails />
+          </div>
+        }
+      />
+      <Route
+        path="/nova-candidatura"
+        element={
+          <div className="flex">
+            <Sidebar />
+            <NewApplication />
           </div>
         }
       />

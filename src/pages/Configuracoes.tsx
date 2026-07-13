@@ -23,31 +23,7 @@ export default function Configuracoes() {
               Editar perfil
             </button>
           </div>
-
-          <div className="bg-[#141414] rounded-xl p-6 border border-[#222]">
-            <h2 className="text-white font-semibold mb-4">Notificações</h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white text-sm">Email de lembretes</p>
-                  <p className="text-[#666] text-xs">Receba lembretes de entrevistas</p>
-                </div>
-                <div className="w-10 h-6 bg-[#1DB954] rounded-full relative cursor-pointer">
-                  <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1" />
-                </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white text-sm">Atualização de status</p>
-                  <p className="text-[#666] text-xs">Notificar quando o status mudar</p>
-                </div>
-                <div className="w-10 h-6 bg-[#1DB954] rounded-full relative cursor-pointer">
-                  <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1" />
-                </div>
-              </div>
-            </div>
-          </div>
-
+          
           <div className="bg-[#141414] rounded-xl p-6 border border-[#222]">
             <h2 className="text-white font-semibold mb-4">Integração com Email</h2>
             <p className="text-[#888] text-sm mb-4">
