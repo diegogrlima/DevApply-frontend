@@ -3,7 +3,6 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import Candidaturas from './pages/Candidaturas'
-import Configuracoes from './pages/Configuracoes'
 import ApplicationDetails from './pages/ApplicationDetails'
 import NewApplication from './pages/NewApplication'
 import Perfil from './pages/Perfil'
@@ -29,15 +28,6 @@ function App() {
           <div className="flex">
             <Sidebar />
             <Candidaturas />
-          </div>
-        }
-      />
-      <Route
-        path="/configuracoes"
-        element={
-          <div className="flex">
-            <Sidebar />
-            <Configuracoes />
           </div>
         }
       />
