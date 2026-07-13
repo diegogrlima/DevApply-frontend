@@ -1,37 +1,178 @@
-import Header from '../components/Header'
-import StatsCard from '../components/StatsCard'
-import RecentApplications from '../components/RecentApplications'
-import ProcessStages from '../components/ProcessStages'
-import UpcomingInterviews from '../components/UpcomingInterviews'
-import Reminders from '../components/Reminders'
+import { useState } from 'react'
 
-const stats = [
-  { title: 'Total de candidaturas', value: 24, subtitle: '+4 esta semana', icon: 'M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0', color: 'bg-[#1DB954]' },
-  { title: 'Em andamento', value: 10, subtitle: '41.7% do total', icon: 'M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z', color: 'bg-[#1DB954]' },
-  { title: 'Entrevistas esta semana', value: 3, subtitle: 'Próxima: Amanhã 10:00', icon: 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5', color: 'bg-[#1DB954]' },
-  { title: 'Aprovadas', value: 2, subtitle: '8.5% do total', icon: 'M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z', color: 'bg-[#1DB954]' },
-  { title: 'Rejeitadas', value: 6, subtitle: '25% do total', icon: 'M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636', color: 'bg-[#EF4444]' },
+const applications = [
+  { company: 'Nubank', role: 'Desenvolvedor Java Júnior', stage: 'Entrevista Técnica', status: 'Em andamento', date: '13/07/2026', color: '#820AD1' },
+  { company: 'Stone', role: 'Backend Java', stage: 'Teste Técnico', status: 'Em andamento', date: '08/07/2026', color: '#1A1A1A' },
+  { company: 'iFood', role: 'Desenvolvedor Backend', stage: 'Em Análise', status: 'Em andamento', date: '05/07/2026', color: '#EA1D2C' },
+  { company: 'XP Inc.', role: 'Engenheiro de Software', stage: 'Rejeitada', status: 'Finalizada', date: '25/06/2026', color: '#000' },
+  { company: 'Ambev', role: 'Desenvolvedor Pleno', stage: 'Entrevista RH', status: 'Em andamento', date: '18/06/2026', color: '#0066CC' },
+  { company: 'C6 Bank', role: 'Analista de Sistemas', stage: 'Currículo Enviado', status: 'Em andamento', date: '14/06/2026', color: '#1A1A1A' },
 ]
 
+const stageColors: Record<string, string> = {
+  'Entrevista Técnica': 'bg-emerald-500/20 text-emerald-400',
+  'Teste Técnico': 'bg-amber-500/20 text-amber-400',
+  'Em Análise': 'bg-blue-500/20 text-blue-400',
+  'Rejeitada': 'bg-[#333] text-[#888]',
+  'Entrevista RH': 'bg-emerald-500/20 text-emerald-400',
+  'Currículo Enviado': 'bg-[#333] text-[#888]',
+}
+
+const statusColors: Record<string, string> = {
+  'Em andamento': 'text-[#888]',
+  'Finalizada': 'text-[#888]',
+}
+
+const filters = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
+
 export default function Dashboard() {
+  const [activeFilter, setActiveFilter] = useState('Todos')
+
+  const filteredApplications = applications.filter((app) => {
+    if (activeFilter === 'Todos') return true
+    if (activeFilter === 'Em andamento') return app.status === 'Em andamento'
+    if (activeFilter === 'Aprovadas') return app.stage.includes('Aprovada')
+    if (activeFilter === 'Rejeitadas') return app.stage.includes('Rejeitada')
+    return true
+  })
+
+  const total = applications.length
+  const inProgress = applications.filter((a) => a.status === 'Em andamento').length
+  const finalized = applications.filter((a) => a.status === 'Finalizada').length
+
   return (
-    <div className="ml-64 min-h-screen bg-[#121212] p-8 w-full">
-      <Header />
-
-      <div className="flex gap-4 mb-6">
-        {stats.map((stat, index) => (
-          <StatsCard key={index} {...stat} />
-        ))}
-      </div>
-
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-6">
-          <RecentApplications />
-          <UpcomingInterviews />
+    <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-white text-2xl font-bold">Home</h1>
+            <p className="text-[#666] text-sm">Visão geral das suas candidaturas.</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#666" className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
+              <input
+                type="text"
+                placeholder="Buscar por empresa ou cargo..."
+                className="bg-[#141414] text-white text-sm pl-10 pr-4 py-2.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954] w-80"
+              />
+            </div>
+            <button className="bg-[#1DB954] text-[#121212] px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-[#1ed760] transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              Nova candidatura
+            </button>
+          </div>
         </div>
-        <div className="space-y-6">
-          <ProcessStages />
-          <Reminders />
+
+        <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="bg-[#141414] rounded-xl p-5 border border-[#222]">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-[#1DB954]/20 rounded-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#1DB954" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                </svg>
+              </div>
+              <span className="text-[#888] text-sm">Total de candidaturas</span>
+            </div>
+            <p className="text-white text-3xl font-bold">{total}</p>
+            <p className="text-[#666] text-xs mt-1">Todas as vagas registradas</p>
+          </div>
+
+          <div className="bg-[#141414] rounded-xl p-5 border border-[#222]">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#F59E0B" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+              </div>
+              <span className="text-[#888] text-sm">Em andamento</span>
+            </div>
+            <p className="text-white text-3xl font-bold">{inProgress}</p>
+            <p className="text-[#666] text-xs mt-1">Processos ativos</p>
+          </div>
+
+          <div className="bg-[#141414] rounded-xl p-5 border border-[#222]">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#10B981" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+              </div>
+              <span className="text-[#888] text-sm">Finalizadas</span>
+            </div>
+            <p className="text-white text-3xl font-bold">{finalized}</p>
+            <p className="text-[#666] text-xs mt-1">Aprovadas ou rejeitadas</p>
+          </div>
+        </div>
+
+        <div className="bg-[#141414] rounded-xl border border-[#222]">
+          <div className="flex items-center justify-between p-4 border-b border-[#222]">
+            <div className="flex items-center gap-2">
+              {filters.map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setActiveFilter(filter)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    activeFilter === filter
+                      ? 'bg-[#1DB954] text-[#121212]'
+                      : 'text-[#888] hover:bg-[#1a1a1a]'
+                  }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+            <div className="flex items-center gap-2">
+              <select className="bg-[#1a1a1a] text-[#888] text-sm px-3 py-2 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]">
+                <option>Mais recentes</option>
+                <option>Mais antigos</option>
+              </select>
+              <button className="p-2 text-[#888] hover:bg-[#1a1a1a] rounded-lg transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div className="divide-y divide-[#222]">
+            {filteredApplications.map((app, index) => (
+              <div key={index} className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] transition-colors">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xs font-bold"
+                  style={{ backgroundColor: app.color }}
+                >
+                  {app.company.slice(0, 2).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-medium">{app.company}</p>
+                  <p className="text-[#666] text-sm truncate">{app.role}</p>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${stageColors[app.stage] || 'bg-[#333] text-[#888]'}`}>
+                    {app.stage}
+                  </span>
+                  <span className={`text-xs mt-1 ${statusColors[app.status]}`}>{app.status}</span>
+                </div>
+                <div className="text-right w-32">
+                  <p className="text-[#888] text-sm">Aplicado em</p>
+                  <p className="text-white text-sm">{app.date}</p>
+                </div>
+                <button className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]">
+                  Ver detalhes
+                </button>
+                <button className="p-2 text-[#888] hover:bg-[#1a1a1a] rounded-lg transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
