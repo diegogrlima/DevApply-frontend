@@ -26,21 +26,32 @@ export default function Dashboard() {
   const [search, setSearch] = useState('')
   const [sortOrder, setSortOrder] = useState<'recent' | 'oldest'>('recent')
   const [showFilters, setShowFilters] = useState(false)
+  const [statusFilter, setStatusFilter] = useState('Todos')
   const navigate = useNavigate()
+
+  const clearFilters = () => {
+    setActiveFilter('Todos')
+    setSearch('')
+    setSortOrder('recent')
+    setStatusFilter('Todos')
+  }
 
   const filteredApplications = applications
     .filter((app) => {
-      const matchesFilter =
+      const matchesTab =
         activeFilter === 'Todos' ||
         (activeFilter === 'Em andamento' && app.status === 'Em andamento') ||
         (activeFilter === 'Aprovadas' && app.stage.includes('Aprovada')) ||
         (activeFilter === 'Rejeitadas' && app.stage.includes('Rejeitada'))
 
+      const matchesStatus =
+        statusFilter === 'Todos' || app.status === statusFilter
+
       const matchesSearch =
         app.company.toLowerCase().includes(search.toLowerCase()) ||
         app.role.toLowerCase().includes(search.toLowerCase())
 
-      return matchesFilter && matchesSearch
+      return matchesTab && matchesStatus && matchesSearch
     })
     .sort((a, b) => {
       const dateA = new Date(a.date.split('/').reverse().join('-'))
@@ -176,13 +187,22 @@ export default function Dashboard() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-[#888] text-sm">Status:</span>
-                  <select className="bg-[#141414] text-white text-sm px-3 py-1.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]">
-                    <option>Todos</option>
-                    <option>Em andamento</option>
-                    <option>Finalizada</option>
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="bg-[#141414] text-white text-sm px-3 py-1.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]"
+                  >
+                    <option value="Todos">Todos</option>
+                    <option value="Em andamento">Em andamento</option>
+                    <option value="Finalizada">Finalizada</option>
                   </select>
                 </div>
-                <button className="text-[#1DB954] text-sm hover:underline">Limpar filtros</button>
+                <button
+                  onClick={clearFilters}
+                  className="text-[#1DB954] text-sm hover:underline"
+                >
+                  Limpar filtros
+                </button>
               </div>
             </div>
           )}
