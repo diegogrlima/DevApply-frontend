@@ -13,12 +13,22 @@ export default function NewApplicationModal({ isOpen, onClose }: NewApplicationM
   const [type, setType] = useState('CLT')
   const [description, setDescription] = useState('')
   const [link, setLink] = useState('')
+  const [logo, setLogo] = useState<string | null>(null)
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => setLogo(reader.result as string)
+      reader.readAsDataURL(file)
+    }
+  }
 
   if (!isOpen) return null
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log({ company, role, salary, location, type, description, link })
+    console.log({ company, role, salary, location, type, description, link, logo })
     onClose()
   }
 
@@ -54,6 +64,45 @@ export default function NewApplicationModal({ isOpen, onClose }: NewApplicationM
               className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]"
               placeholder="Ex: Nubank"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-[#888] mb-2">
+              Logo da empresa
+            </label>
+            <div className="flex items-center gap-4">
+              <label
+                htmlFor="logo-upload"
+                className="flex flex-col items-center justify-center w-20 h-20 bg-[#1a1a1a] border border-dashed border-[#333] rounded-xl cursor-pointer hover:border-[#1DB954] transition-colors"
+              >
+                {logo ? (
+                  <img src={logo} alt="Logo" className="w-full h-full object-cover rounded-xl" />
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#666" className="w-6 h-6">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                    </svg>
+                    <span className="text-[#666] text-[10px] mt-1">Foto</span>
+                  </>
+                )}
+                <input
+                  id="logo-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoChange}
+                  className="hidden"
+                />
+              </label>
+              {logo && (
+                <button
+                  type="button"
+                  onClick={() => setLogo(null)}
+                  className="text-red-400 text-sm hover:underline"
+                >
+                  Remover
+                </button>
+              )}
+            </div>
           </div>
 
           <div>
