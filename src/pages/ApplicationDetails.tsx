@@ -121,6 +121,14 @@ export default function ApplicationDetails() {
           </div>
         </div>
 
+        {app.status === 'Finalizada' && (
+          <div className={`p-4 rounded-xl mb-6 ${app.stage === 'Aprovada' ? 'bg-emerald-500/10 border border-emerald-500/30' : 'bg-red-500/10 border border-red-500/30'}`}>
+            <p className={`text-sm font-medium ${app.stage === 'Aprovada' ? 'text-emerald-400' : 'text-red-400'}`}>
+              Esta candidatura foi {app.stage === 'Aprovada' ? 'aprovada' : 'rejeitada'} e não pode mais ser alterada.
+            </p>
+          </div>
+        )}
+
         {isEditing ? (
           <div className="bg-[#141414] rounded-xl p-6 border border-[#222] mb-6">
             <h2 className="text-white font-semibold mb-4">Editando candidatura</h2>
@@ -260,12 +268,20 @@ export default function ApplicationDetails() {
             Excluir candidatura
           </button>
           <div className="flex items-center gap-3">
-            <button onClick={startEdit} className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]">
-              Editar
-            </button>
-            <button onClick={() => { setNewStage(app.stage); setShowStatusModal(true) }} className="px-4 py-2 bg-[#1DB954] text-[#121212] text-sm font-semibold rounded-lg hover:bg-[#1ed760] transition-colors">
-              Atualizar status
-            </button>
+            {app.status !== 'Finalizada' && (
+              <button onClick={startEdit} className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]">
+                Editar
+              </button>
+            )}
+            {app.status !== 'Finalizada' ? (
+              <button onClick={() => { setNewStage(app.stage); setShowStatusModal(true) }} className="px-4 py-2 bg-[#1DB954] text-[#121212] text-sm font-semibold rounded-lg hover:bg-[#1ed760] transition-colors">
+                Atualizar status
+              </button>
+            ) : (
+              <span className="px-4 py-2 bg-[#333] text-[#888] text-sm rounded-lg">
+                {app.stage === 'Aprovada' ? 'Aprovada' : 'Rejeitada'}
+              </span>
+            )}
           </div>
         </div>
 
