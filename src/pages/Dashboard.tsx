@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const applications = [
   { company: 'Nubank', role: 'Desenvolvedor Java Júnior', stage: 'Entrevista Técnica', status: 'Em andamento', date: '13/07/2026', color: '#820AD1' },
@@ -27,6 +28,7 @@ const filters = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
 
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState('Todos')
+  const navigate = useNavigate()
 
   const filteredApplications = applications.filter((app) => {
     if (activeFilter === 'Todos') return true
@@ -162,7 +164,10 @@ export default function Dashboard() {
                   <p className="text-[#888] text-sm">Aplicado em</p>
                   <p className="text-white text-sm">{app.date}</p>
                 </div>
-                <button className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]">
+                <button
+                  onClick={() => navigate(`/candidatura/${index + 1}`)}
+                  className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]"
+                >
                   Ver detalhes
                 </button>
                 <button className="p-2 text-[#888] hover:bg-[#1a1a1a] rounded-lg transition-colors">
