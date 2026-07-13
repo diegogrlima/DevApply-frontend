@@ -1,129 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom'
-
-interface ApplicationData {
-  company: string
-  role: string
-  stage: string
-  status: string
-  date: string
-  color: string
-  salary: string
-  location: string
-  type: string
-  description: string
-  timeline: { date: string; event: string; done: boolean }[]
-}
-
-const applicationsData: Record<string, ApplicationData> = {
-  '1': {
-    company: 'Nubank',
-    role: 'Desenvolvedor Java Júnior',
-    stage: 'Entrevista Técnica',
-    status: 'Em andamento',
-    date: '13/07/2026',
-    color: '#820AD1',
-    salary: 'R$ 6.000 - R$ 8.000',
-    location: 'Remoto',
-    type: 'CLT',
-    description: 'Desenvolvimento de microsserviços em Java/Spring Boot, atuando na squad de pagamentos. Experiência com AWS, Docker e testes automatizados.',
-    timeline: [
-      { date: '13/07/2026', event: 'Currículo enviado', done: true },
-      { date: '15/07/2026', event: 'Currículo em análise', done: true },
-      { date: '18/07/2026', event: 'Convite para entrevista técnica', done: true },
-      { date: '22/07/2026', event: 'Entrevista técnica agendada', done: false },
-      { date: '', event: 'Proposta', done: false },
-    ],
-  },
-  '2': {
-    company: 'Stone',
-    role: 'Backend Java',
-    stage: 'Teste Técnico',
-    status: 'Em andamento',
-    date: '08/07/2026',
-    color: '#1A1A1A',
-    salary: 'R$ 8.000 - R$ 12.000',
-    location: 'São Paulo, SP',
-    type: 'CLT',
-    description: 'Desenvolvimento de APIs RESTful para sistema de pagamentos. Java, Spring Boot, PostgreSQL.',
-    timeline: [
-      { date: '08/07/2026', event: 'Currículo enviado', done: true },
-      { date: '10/07/2026', event: 'Teste técnico enviado', done: true },
-      { date: '', event: 'Entrevista', done: false },
-      { date: '', event: 'Proposta', done: false },
-    ],
-  },
-  '3': {
-    company: 'iFood',
-    role: 'Desenvolvedor Backend',
-    stage: 'Em Análise',
-    status: 'Em andamento',
-    date: '05/07/2026',
-    color: '#EA1D2C',
-    salary: 'R$ 7.000 - R$ 10.000',
-    location: 'Remoto',
-    type: 'CLT',
-    description: 'Desenvolvimento de microsserviços escaláveis para plataforma de delivery. Go ou Python.',
-    timeline: [
-      { date: '05/07/2026', event: 'Currículo enviado', done: true },
-      { date: '07/07/2026', event: 'Em análise pelo RH', done: true },
-      { date: '', event: 'Entrevista técnica', done: false },
-      { date: '', event: 'Proposta', done: false },
-    ],
-  },
-  '4': {
-    company: 'XP Inc.',
-    role: 'Engenheiro de Software',
-    stage: 'Rejeitada',
-    status: 'Finalizada',
-    date: '25/06/2026',
-    color: '#000',
-    salary: 'R$ 15.000 - R$ 20.000',
-    location: 'São Paulo, SP',
-    type: 'CLT',
-    description: 'Arquitetura de sistemas de alta performance para trading. Experiência com Java/Kotlin.',
-    timeline: [
-      { date: '25/06/2026', event: 'Currículo enviado', done: true },
-      { date: '27/06/2026', event: 'Entrevista técnica', done: true },
-      { date: '01/07/2026', event: 'Rejeitada', done: true },
-    ],
-  },
-  '5': {
-    company: 'Ambev',
-    role: 'Desenvolvedor Pleno',
-    stage: 'Entrevista RH',
-    status: 'Em andamento',
-    date: '18/06/2026',
-    color: '#0066CC',
-    salary: 'R$ 9.000 - R$ 13.000',
-    location: 'São Paulo, SP',
-    type: 'CLT',
-    description: 'Desenvolvimento de aplicações web para gestão de vendas. React + Node.js.',
-    timeline: [
-      { date: '18/06/2026', event: 'Currículo enviado', done: true },
-      { date: '22/06/2026', event: 'Entrevista técnica', done: true },
-      { date: '28/06/2026', event: 'Entrevista RH agendada', done: false },
-      { date: '', event: 'Proposta', done: false },
-    ],
-  },
-  '6': {
-    company: 'C6 Bank',
-    role: 'Analista de Sistemas',
-    stage: 'Currículo Enviado',
-    status: 'Em andamento',
-    date: '14/06/2026',
-    color: '#1A1A1A',
-    salary: 'R$ 7.000 - R$ 10.000',
-    location: 'Remoto',
-    type: 'CLT',
-    description: 'Análise e desenvolvimento de sistemas bancários. Java, APIs REST.',
-    timeline: [
-      { date: '14/06/2026', event: 'Currículo enviado', done: true },
-      { date: '', event: 'Em análise', done: false },
-      { date: '', event: 'Entrevista', done: false },
-      { date: '', event: 'Proposta', done: false },
-    ],
-  },
-}
+import { useApplications } from '../contexts/ApplicationsContext'
 
 const stageColors: Record<string, string> = {
   'Entrevista Técnica': 'bg-emerald-500/20 text-emerald-400',
@@ -137,8 +13,9 @@ const stageColors: Record<string, string> = {
 export default function ApplicationDetails() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { applications } = useApplications()
 
-  const app = applicationsData[id || '1']
+  const app = applications.find((a) => a.id === Number(id))
 
   if (!app) {
     return (
@@ -171,12 +48,16 @@ export default function ApplicationDetails() {
 
         <div className="flex items-start justify-between mb-8">
           <div className="flex items-center gap-4">
-            <div
-              className="w-16 h-16 rounded-xl flex items-center justify-center text-white text-lg font-bold"
-              style={{ backgroundColor: app.color }}
-            >
-              {app.company.slice(0, 2).toUpperCase()}
-            </div>
+            {app.logo ? (
+              <img src={app.logo} alt={app.company} className="w-16 h-16 rounded-xl object-cover" />
+            ) : (
+              <div
+                className="w-16 h-16 rounded-xl flex items-center justify-center text-white text-lg font-bold"
+                style={{ backgroundColor: app.color }}
+              >
+                {app.company.slice(0, 2).toUpperCase()}
+              </div>
+            )}
             <div>
               <h1 className="text-white text-2xl font-bold">{app.company}</h1>
               <p className="text-[#888]">{app.role}</p>
@@ -197,11 +78,11 @@ export default function ApplicationDetails() {
         <div className="grid grid-cols-3 gap-4 mb-8">
           <div className="bg-[#141414] rounded-xl p-4 border border-[#222]">
             <p className="text-[#666] text-xs mb-1">Salário</p>
-            <p className="text-white font-medium">{app.salary}</p>
+            <p className="text-white font-medium">{app.salary || 'Não informado'}</p>
           </div>
           <div className="bg-[#141414] rounded-xl p-4 border border-[#222]">
             <p className="text-[#666] text-xs mb-1">Localização</p>
-            <p className="text-white font-medium">{app.location}</p>
+            <p className="text-white font-medium">{app.location || 'Não informado'}</p>
           </div>
           <div className="bg-[#141414] rounded-xl p-4 border border-[#222]">
             <p className="text-[#666] text-xs mb-1">Contrato</p>
@@ -212,7 +93,7 @@ export default function ApplicationDetails() {
         <div className="grid grid-cols-2 gap-6">
           <div className="bg-[#141414] rounded-xl p-6 border border-[#222]">
             <h2 className="text-white font-semibold mb-4">Descrição da vaga</h2>
-            <p className="text-[#888] text-sm leading-relaxed">{app.description}</p>
+            <p className="text-[#888] text-sm leading-relaxed">{app.description || 'Sem descrição'}</p>
             <div className="mt-6 pt-4 border-t border-[#222]">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-[#666]">Data da candidatura</span>

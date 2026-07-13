@@ -1,14 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-const applications = [
-  { id: 1, company: 'Nubank', role: 'Desenvolvedor Java Júnior', stage: 'Entrevista Técnica', status: 'Em andamento', date: '13/07/2026', color: '#820AD1' },
-  { id: 2, company: 'Stone', role: 'Backend Java', stage: 'Teste Técnico', status: 'Em andamento', date: '08/07/2026', color: '#1A1A1A' },
-  { id: 3, company: 'iFood', role: 'Desenvolvedor Backend', stage: 'Em Análise', status: 'Em andamento', date: '05/07/2026', color: '#EA1D2C' },
-  { id: 4, company: 'XP Inc.', role: 'Engenheiro de Software', stage: 'Rejeitada', status: 'Finalizada', date: '25/06/2026', color: '#000' },
-  { id: 5, company: 'Ambev', role: 'Desenvolvedor Pleno', stage: 'Entrevista RH', status: 'Em andamento', date: '18/06/2026', color: '#0066CC' },
-  { id: 6, company: 'C6 Bank', role: 'Analista de Sistemas', stage: 'Currículo Enviado', status: 'Em andamento', date: '14/06/2026', color: '#1A1A1A' },
-]
+import { useApplications } from '../contexts/ApplicationsContext'
 
 const stageColors: Record<string, string> = {
   'Entrevista Técnica': 'bg-emerald-500/20 text-emerald-400',
@@ -22,6 +14,7 @@ const stageColors: Record<string, string> = {
 const filters = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
 
 export default function Dashboard() {
+  const { applications } = useApplications()
   const [activeFilter, setActiveFilter] = useState('Todos')
   const [search, setSearch] = useState('')
   const [sortOrder, setSortOrder] = useState<'recent' | 'oldest'>('recent')

@@ -23,7 +23,7 @@ export default function Configuracoes() {
               Editar perfil
             </button>
           </div>
-          
+
           <div className="bg-[#141414] rounded-xl p-6 border border-[#222]">
             <h2 className="text-white font-semibold mb-4">Integração com Email</h2>
             <p className="text-[#888] text-sm mb-4">
@@ -34,17 +34,7 @@ export default function Configuracoes() {
             </button>
           </div>
 
-          <div className="bg-[#141414] rounded-xl p-6 border border-[#222]">
-            <h2 className="text-white font-semibold mb-4">Dados</h2>
-            <div className="flex items-center gap-4">
-              <button className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]">
-                Exportar dados
-              </button>
-              <button className="px-4 py-2 text-red-400 text-sm rounded-lg hover:bg-red-500/10 transition-colors">
-                Limpar todos os dados
-              </button>
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

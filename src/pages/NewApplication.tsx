@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useApplications } from '../contexts/ApplicationsContext'
+
+const companyColors = ['#820AD1', '#EA1D2C', '#0066CC', '#1DB954', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4']
 
 export default function NewApplication() {
   const navigate = useNavigate()
+  const { addApplication } = useApplications()
   const [company, setCompany] = useState('')
   const [role, setRole] = useState('')
   const [salary, setSalary] = useState('')
@@ -23,7 +27,8 @@ export default function NewApplication() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log({ company, role, salary, location, type, description, link, logo })
+    const randomColor = companyColors[Math.floor(Math.random() * companyColors.length)]
+    addApplication({ company, role, salary, location, type, description, link, logo, color: randomColor })
     navigate('/')
   }
 
