@@ -1,10 +1,11 @@
+import { Routes, Route } from 'react-router-dom'
+import Register from './pages/Register'
+
 function App() {
-
-
   return (
-    <>
-      <h1>Olá mundo</h1>
-    </>
+    <Routes>
+      <Route path="/register" element={<Register />} />
+    </Routes>
   )
 }
 
