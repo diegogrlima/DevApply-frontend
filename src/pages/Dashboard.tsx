@@ -24,21 +24,29 @@ const filters = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
 export default function Dashboard() {
   const [activeFilter, setActiveFilter] = useState('Todos')
   const [search, setSearch] = useState('')
+  const [sortOrder, setSortOrder] = useState<'recent' | 'oldest'>('recent')
+  const [showFilters, setShowFilters] = useState(false)
   const navigate = useNavigate()
 
-  const filteredApplications = applications.filter((app) => {
-    const matchesFilter =
-      activeFilter === 'Todos' ||
-      (activeFilter === 'Em andamento' && app.status === 'Em andamento') ||
-      (activeFilter === 'Aprovadas' && app.stage.includes('Aprovada')) ||
-      (activeFilter === 'Rejeitadas' && app.stage.includes('Rejeitada'))
+  const filteredApplications = applications
+    .filter((app) => {
+      const matchesFilter =
+        activeFilter === 'Todos' ||
+        (activeFilter === 'Em andamento' && app.status === 'Em andamento') ||
+        (activeFilter === 'Aprovadas' && app.stage.includes('Aprovada')) ||
+        (activeFilter === 'Rejeitadas' && app.stage.includes('Rejeitada'))
 
-    const matchesSearch =
-      app.company.toLowerCase().includes(search.toLowerCase()) ||
-      app.role.toLowerCase().includes(search.toLowerCase())
+      const matchesSearch =
+        app.company.toLowerCase().includes(search.toLowerCase()) ||
+        app.role.toLowerCase().includes(search.toLowerCase())
 
-    return matchesFilter && matchesSearch
-  })
+      return matchesFilter && matchesSearch
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.date.split('/').reverse().join('-'))
+      const dateB = new Date(b.date.split('/').reverse().join('-'))
+      return sortOrder === 'recent' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime()
+    })
 
   const total = applications.length
   const inProgress = applications.filter((a) => a.status === 'Em andamento').length
@@ -136,17 +144,48 @@ export default function Dashboard() {
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <select className="bg-[#1a1a1a] text-[#888] text-sm px-3 py-2 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]">
-                <option>Mais recentes</option>
-                <option>Mais antigos</option>
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value as 'recent' | 'oldest')}
+                className="bg-[#1a1a1a] text-[#888] text-sm px-3 py-2 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]"
+              >
+                <option value="recent">Mais recentes</option>
+                <option value="oldest">Mais antigos</option>
               </select>
-              <button className="p-2 text-[#888] hover:bg-[#1a1a1a] rounded-lg transition-colors">
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`p-2 rounded-lg transition-colors ${showFilters ? 'bg-[#1DB954] text-[#121212]' : 'text-[#888] hover:bg-[#1a1a1a]'}`}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
                 </svg>
               </button>
             </div>
           </div>
+
+          {showFilters && (
+            <div className="p-4 border-b border-[#222] bg-[#1a1a1a]">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-[#888] text-sm">Empresa:</span>
+                  <input
+                    type="text"
+                    placeholder="Filtrar por empresa..."
+                    className="bg-[#141414] text-white text-sm px-3 py-1.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[#888] text-sm">Status:</span>
+                  <select className="bg-[#141414] text-white text-sm px-3 py-1.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]">
+                    <option>Todos</option>
+                    <option>Em andamento</option>
+                    <option>Finalizada</option>
+                  </select>
+                </div>
+                <button className="text-[#1DB954] text-sm hover:underline">Limpar filtros</button>
+              </div>
+            </div>
+          )}
 
           <div className="divide-y divide-[#222]">
             {filteredApplications.map((app) => (
