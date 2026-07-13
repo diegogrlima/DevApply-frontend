@@ -6,6 +6,7 @@ import Candidaturas from './pages/Candidaturas'
 import ApplicationDetails from './pages/ApplicationDetails'
 import NewApplication from './pages/NewApplication'
 import Perfil from './pages/Perfil'
+import Emails from './pages/Emails'
 import Sidebar from './components/Sidebar'
 
 function App() {
@@ -55,6 +56,15 @@ function App() {
           <div className="flex">
             <Sidebar />
             <Perfil />
+          </div>
+        }
+      />
+      <Route
+        path="/emails"
+        element={
+          <div className="flex">
+            <Sidebar />
+            <Emails />
           </div>
         }
       />
