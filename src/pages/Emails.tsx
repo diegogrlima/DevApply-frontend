@@ -18,7 +18,6 @@ Status atual: Em análise
 Acesse a plataforma Gupy para mais detalhes sobre o processo seletivo.
 
 Equipe de Recrutamento - Nubank`,
-    read: false,
   },
   {
     id: 2,
@@ -37,7 +36,6 @@ Prazo: 5 dias úteis
 Acesse a plataforma InHire para realizar a prova.
 
 B sorte!`,
-    read: true,
   },
   {
     id: 3,
@@ -55,7 +53,6 @@ Sua candidatura está em análise pelo nosso time de recrutamento.
 Retornaremos em breve com novidades.
 
 Equipe de Pessoas - iFood`,
-    read: true,
   },
   {
     id: 4,
@@ -73,7 +70,6 @@ Após análise cuidadosa, infelizmente não seguimos com sua candidatura para a 
 Desejamos sucesso na sua carreira!
 
 Equipe de Recrutamento - XP Inc.`,
-    read: true,
   },
   {
     id: 5,
@@ -91,20 +87,12 @@ Encontramos 10 novas vagas compatíveis com seu perfil:
 - Backend Developer - QuintoAndar
 
 Acesse o LinkedIn para ver detalhes.`,
-    read: true,
   },
 ]
 
 export default function Emails() {
   const navigate = useNavigate()
   const [selectedEmail, setSelectedEmail] = useState<typeof mockEmails[0] | null>(null)
-  const [emails, setEmails] = useState(mockEmails)
-
-  const markAsRead = (id: number) => {
-    setEmails(emails.map((e) => (e.id === id ? { ...e, read: true } : e)))
-  }
-
-  const unreadCount = emails.filter((e) => !e.read).length
 
   return (
     <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full">
@@ -114,7 +102,6 @@ export default function Emails() {
             <h1 className="text-white text-2xl font-bold">Emails</h1>
             <p className="text-[#666] text-sm">
               Emails recebidos no email de candidaturas.
-              {unreadCount > 0 && <span className="text-[#1DB954] ml-2">{unreadCount} não lido(s)</span>}
             </p>
           </div>
           <button
@@ -165,23 +152,18 @@ export default function Emails() {
           ) : (
             <div className="bg-[#141414] rounded-xl border border-[#222]">
               <div className="divide-y divide-[#222]">
-                {emails.map((email) => (
+                {mockEmails.map((email) => (
                   <div
                     key={email.id}
-                    onClick={() => { setSelectedEmail(email); markAsRead(email.id) }}
+                    onClick={() => setSelectedEmail(email)}
                     className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] transition-colors cursor-pointer"
                   >
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${
-                      email.read ? 'bg-[#333] text-[#888]' : 'bg-[#1DB954] text-[#121212]'
-                    }`}>
+                    <div className="w-10 h-10 rounded-full bg-[#1DB954] flex items-center justify-center text-[#121212] text-sm font-bold">
                       {email.fromName.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className={`font-medium ${email.read ? 'text-[#888]' : 'text-white'}`}>{email.fromName}</p>
-                        {!email.read && <div className="w-2 h-2 bg-[#1DB954] rounded-full" />}
-                      </div>
-                      <p className={`text-sm truncate ${email.read ? 'text-[#666]' : 'text-[#888]'}`}>{email.subject}</p>
+                      <p className="text-white font-medium">{email.fromName}</p>
+                      <p className="text-[#888] text-sm truncate">{email.subject}</p>
                       <p className="text-[#666] text-xs truncate mt-1">{email.preview}</p>
                     </div>
                     <div className="text-right">
