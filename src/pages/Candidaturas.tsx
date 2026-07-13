@@ -58,7 +58,11 @@ export default function Candidaturas() {
         <div className="bg-[#141414] rounded-xl border border-[#222]">
           <div className="divide-y divide-[#222]">
             {filtered.map((app) => (
-              <div key={app.id} className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] transition-colors">
+              <div
+                key={app.id}
+                onClick={() => navigate(`/candidatura/${app.id}`)}
+                className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] transition-colors cursor-pointer"
+              >
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xs font-bold"
                   style={{ backgroundColor: app.color }}
@@ -77,7 +81,7 @@ export default function Candidaturas() {
                   <p className="text-white text-sm">{app.date}</p>
                 </div>
                 <button
-                  onClick={() => navigate(`/candidatura/${app.id}`)}
+                  onClick={(e) => { e.stopPropagation(); navigate(`/candidatura/${app.id}`) }}
                   className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]"
                 >
                   Ver detalhes
