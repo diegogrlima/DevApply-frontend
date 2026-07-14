@@ -18,7 +18,7 @@ export default function Emails() {
   })
 
   return (
-    <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full">
+    <div className="md:ml-64 min-h-screen bg-[#0a0a0a] p-4 md:p-8 w-full">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>

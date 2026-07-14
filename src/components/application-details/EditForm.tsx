@@ -34,7 +34,7 @@ export default function EditForm({ app, onSave, onCancel }: EditFormProps) {
     <div className="bg-[#141414] rounded-xl p-6 border border-[#222] mb-6">
       <h2 className="text-white font-semibold mb-4">Editando candidatura</h2>
       <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm text-[#888] mb-1">Empresa</label>
             <input value={form.company} onChange={(e) => handleChange('company', e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
@@ -44,7 +44,7 @@ export default function EditForm({ app, onSave, onCancel }: EditFormProps) {
             <input value={form.role} onChange={(e) => handleChange('role', e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm text-[#888] mb-1">Salário</label>
             <input value={form.salary} onChange={(e) => handleChange('salary', e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />

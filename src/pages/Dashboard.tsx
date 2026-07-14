@@ -11,14 +11,14 @@ export default function Dashboard() {
   const { filtered, stats, filters, setFilter, clearFilters } = useFilteredApplications(applications)
 
   return (
-    <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full">
+    <div className="md:ml-64 min-h-screen bg-[#0a0a0a] p-4 md:p-8 w-full">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-white text-2xl font-bold">Home</h1>
             <p className="text-[#666] text-sm">Visão geral das suas candidaturas.</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <div className="relative">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#666" className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -28,12 +28,12 @@ export default function Dashboard() {
                 placeholder="Buscar por empresa ou cargo..."
                 value={filters.search}
                 onChange={(e) => setFilter('search', e.target.value)}
-                className="bg-[#141414] text-white text-sm pl-10 pr-4 py-2.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954] w-80"
+                className="bg-[#141414] text-white text-sm pl-10 pr-4 py-2.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954] w-full sm:w-80"
               />
             </div>
             <button
               onClick={() => navigate('/nova-candidatura')}
-              className="bg-[#1DB954] text-[#121212] px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center gap-2 hover:bg-[#1ed760] transition-colors"
+              className="bg-[#1DB954] text-[#121212] px-4 py-2.5 rounded-lg font-semibold text-sm flex items-center justify-center gap-2 hover:bg-[#1ed760] transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -43,7 +43,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-[#141414] rounded-xl p-5 border border-[#222]">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 bg-[#1DB954]/20 rounded-lg flex items-center justify-center">

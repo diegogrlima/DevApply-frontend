@@ -22,7 +22,7 @@ export default function ApplicationDetails() {
 
   if (!app) {
     return (
-      <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full flex items-center justify-center">
+      <div className="md:ml-64 min-h-screen bg-[#0a0a0a] p-4 md:p-8 w-full flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#888] text-lg mb-4">Candidatura não encontrada</p>
           <button onClick={() => navigate('/')} className="px-4 py-2 bg-[#1DB954] text-[#121212] text-sm font-semibold rounded-lg hover:bg-[#1ed760] transition-colors">
@@ -34,7 +34,7 @@ export default function ApplicationDetails() {
   }
 
   return (
-    <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full">
+    <div className="md:ml-64 min-h-screen bg-[#0a0a0a] p-4 md:p-8 w-full">
       <div className="max-w-4xl mx-auto">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[#888] hover:text-white mb-6 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -79,7 +79,7 @@ export default function ApplicationDetails() {
             onCancel={() => setIsEditing(false)}
           />
         ) : (
-          <div className="grid grid-cols-3 gap-4 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-[#141414] rounded-xl p-4 border border-[#222]">
               <p className="text-[#666] text-xs mb-1">Salário</p>
               <p className="text-white font-medium">{app.salary || 'Não informado'}</p>
@@ -95,7 +95,7 @@ export default function ApplicationDetails() {
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-[#141414] rounded-xl p-6 border border-[#222]">
             <h2 className="text-white font-semibold mb-4">Descrição da vaga</h2>
             <p className="text-[#888] text-sm leading-relaxed">{app.description || 'Sem descrição'}</p>

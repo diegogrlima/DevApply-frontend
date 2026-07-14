@@ -19,7 +19,7 @@ export default function Perfil() {
   }
 
   return (
-    <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full">
+    <div className="md:ml-64 min-h-screen bg-[#0a0a0a] p-4 md:p-8 w-full">
       <div className="max-w-2xl mx-auto">
         <button
           onClick={() => navigate(-1)}
@@ -115,7 +115,7 @@ export default function Perfil() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="imapServer" className="block text-sm font-medium text-[#888] mb-2">
                     Servidor IMAP
