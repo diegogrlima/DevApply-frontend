@@ -85,13 +85,13 @@ export default function Dashboard() {
         </div>
 
         <div className="bg-[#141414] rounded-xl border border-[#222]">
-          <div className="flex items-center justify-between p-4 border-b border-[#222]">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border-b border-[#222] gap-3">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
               {filterTabs.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setFilter('activeFilter', tab)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-colors ${
                     filters.activeFilter === tab
                       ? 'bg-[#1DB954] text-[#121212]'
                       : 'text-[#888] hover:bg-[#1a1a1a]'
@@ -159,39 +159,35 @@ export default function Dashboard() {
               <div
                 key={app.id}
                 onClick={() => navigate(`/candidatura/${app.id}`)}
-                className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] transition-colors cursor-pointer"
+                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 hover:bg-[#1a1a1a] transition-colors cursor-pointer"
               >
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xs font-bold"
-                  style={{ backgroundColor: app.color }}
-                >
-                  {app.company.slice(0, 2).toUpperCase()}
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white text-xs font-bold shrink-0"
+                    style={{ backgroundColor: app.color }}
+                  >
+                    {app.company.slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-medium truncate">{app.company}</p>
+                    <p className="text-[#666] text-sm truncate">{app.role}</p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-white font-medium">{app.company}</p>
-                  <p className="text-[#666] text-sm truncate">{app.role}</p>
+                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pl-13 sm:pl-0">
+                  <div className="flex flex-col items-start sm:items-end">
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStageColor(app.stage)}`}>
+                      {app.stage}
+                    </span>
+                    <span className="text-xs mt-1 text-[#888] sm:hidden">{app.date}</span>
+                  </div>
+                  <span className="text-xs text-[#888] hidden sm:block whitespace-nowrap">{app.date}</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); navigate(`/candidatura/${app.id}`) }}
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#1a1a1a] text-white text-xs sm:text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333] whitespace-nowrap"
+                  >
+                    Detalhes
+                  </button>
                 </div>
-                <div className="flex flex-col items-end">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStageColor(app.stage)}`}>
-                    {app.stage}
-                  </span>
-                  <span className="text-xs mt-1 text-[#888]">{app.status}</span>
-                </div>
-                <div className="text-right w-32">
-                  <p className="text-[#888] text-sm">Aplicado em</p>
-                  <p className="text-white text-sm">{app.date}</p>
-                </div>
-                <button
-                  onClick={(e) => { e.stopPropagation(); navigate(`/candidatura/${app.id}`) }}
-                  className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]"
-                >
-                  Ver detalhes
-                </button>
-                <button className="p-2 text-[#888] hover:bg-[#1a1a1a] rounded-lg transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                  </svg>
-                </button>
               </div>
             ))}
           </div>

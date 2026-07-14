@@ -53,31 +53,32 @@ export default function Candidaturas() {
               <div
                 key={app.id}
                 onClick={() => navigate(`/candidatura/${app.id}`)}
-                className="flex items-center gap-4 p-4 hover:bg-[#1a1a1a] transition-colors cursor-pointer"
+                className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 p-4 hover:bg-[#1a1a1a] transition-colors cursor-pointer"
               >
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-xs font-bold"
-                  style={{ backgroundColor: app.color }}
-                >
-                  {app.company.slice(0, 2).toUpperCase()}
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div
+                    className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-white text-xs font-bold shrink-0"
+                    style={{ backgroundColor: app.color }}
+                  >
+                    {app.company.slice(0, 2).toUpperCase()}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-white font-medium truncate">{app.company}</p>
+                    <p className="text-[#666] text-sm truncate">{app.role}</p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-white font-medium">{app.company}</p>
-                  <p className="text-[#666] text-sm truncate">{app.role}</p>
+                <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 pl-13 sm:pl-0">
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStageColor(app.stage)}`}>
+                    {app.stage}
+                  </span>
+                  <span className="text-xs text-[#888] hidden sm:block whitespace-nowrap">{app.date}</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); navigate(`/candidatura/${app.id}`) }}
+                    className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#1a1a1a] text-white text-xs sm:text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333] whitespace-nowrap"
+                  >
+                    Detalhes
+                  </button>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStageColor(app.stage)}`}>
-                  {app.stage}
-                </span>
-                <div className="text-right w-32">
-                  <p className="text-[#888] text-sm">Aplicado em</p>
-                  <p className="text-white text-sm">{app.date}</p>
-                </div>
-                <button
-                  onClick={(e) => { e.stopPropagation(); navigate(`/candidatura/${app.id}`) }}
-                  className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] transition-colors border border-[#333]"
-                >
-                  Ver detalhes
-                </button>
               </div>
             ))}
           </div>
