@@ -1,52 +1,14 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApplications } from '../contexts/ApplicationsContext'
 import { getStageColor } from '../constants/stages'
+import { useFilteredApplications } from '../hooks/useFilteredApplications'
 
-const filters = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
+const filterTabs = ['Todos', 'Em andamento', 'Aprovadas', 'Rejeitadas']
 
 export default function Dashboard() {
   const { applications } = useApplications()
-  const [activeFilter, setActiveFilter] = useState('Todos')
-  const [search, setSearch] = useState('')
-  const [sortOrder, setSortOrder] = useState<'recent' | 'oldest'>('recent')
-  const [showFilters, setShowFilters] = useState(false)
-  const [statusFilter, setStatusFilter] = useState('Todos')
   const navigate = useNavigate()
-
-  const clearFilters = () => {
-    setActiveFilter('Todos')
-    setSearch('')
-    setSortOrder('recent')
-    setStatusFilter('Todos')
-  }
-
-  const filteredApplications = applications
-    .filter((app) => {
-      const matchesTab =
-        activeFilter === 'Todos' ||
-        (activeFilter === 'Em andamento' && app.status === 'Em andamento') ||
-        (activeFilter === 'Aprovadas' && app.stage.includes('Aprovada')) ||
-        (activeFilter === 'Rejeitadas' && app.stage.includes('Rejeitada'))
-
-      const matchesStatus =
-        statusFilter === 'Todos' || app.status === statusFilter
-
-      const matchesSearch =
-        app.company.toLowerCase().includes(search.toLowerCase()) ||
-        app.role.toLowerCase().includes(search.toLowerCase())
-
-      return matchesTab && matchesStatus && matchesSearch
-    })
-    .sort((a, b) => {
-      const dateA = new Date(a.date.split('/').reverse().join('-'))
-      const dateB = new Date(b.date.split('/').reverse().join('-'))
-      return sortOrder === 'recent' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime()
-    })
-
-  const total = applications.length
-  const inProgress = applications.filter((a) => a.status === 'Em andamento').length
-  const finalized = applications.filter((a) => a.status === 'Finalizada').length
+  const { filtered, stats, filters, setFilter, clearFilters } = useFilteredApplications(applications)
 
   return (
     <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full">
@@ -64,8 +26,8 @@ export default function Dashboard() {
               <input
                 type="text"
                 placeholder="Buscar por empresa ou cargo..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={filters.search}
+                onChange={(e) => setFilter('search', e.target.value)}
                 className="bg-[#141414] text-white text-sm pl-10 pr-4 py-2.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954] w-80"
               />
             </div>
@@ -91,7 +53,7 @@ export default function Dashboard() {
               </div>
               <span className="text-[#888] text-sm">Total de candidaturas</span>
             </div>
-            <p className="text-white text-3xl font-bold">{total}</p>
+            <p className="text-white text-3xl font-bold">{stats.total}</p>
             <p className="text-[#666] text-xs mt-1">Todas as vagas registradas</p>
           </div>
 
@@ -104,7 +66,7 @@ export default function Dashboard() {
               </div>
               <span className="text-[#888] text-sm">Em andamento</span>
             </div>
-            <p className="text-white text-3xl font-bold">{inProgress}</p>
+            <p className="text-white text-3xl font-bold">{stats.inProgress}</p>
             <p className="text-[#666] text-xs mt-1">Processos ativos</p>
           </div>
 
@@ -117,7 +79,7 @@ export default function Dashboard() {
               </div>
               <span className="text-[#888] text-sm">Finalizadas</span>
             </div>
-            <p className="text-white text-3xl font-bold">{finalized}</p>
+            <p className="text-white text-3xl font-bold">{stats.finalized}</p>
             <p className="text-[#666] text-xs mt-1">Aprovadas ou rejeitadas</p>
           </div>
         </div>
@@ -125,32 +87,32 @@ export default function Dashboard() {
         <div className="bg-[#141414] rounded-xl border border-[#222]">
           <div className="flex items-center justify-between p-4 border-b border-[#222]">
             <div className="flex items-center gap-2">
-              {filters.map((filter) => (
+              {filterTabs.map((tab) => (
                 <button
-                  key={filter}
-                  onClick={() => setActiveFilter(filter)}
+                  key={tab}
+                  onClick={() => setFilter('activeFilter', tab)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    activeFilter === filter
+                    filters.activeFilter === tab
                       ? 'bg-[#1DB954] text-[#121212]'
                       : 'text-[#888] hover:bg-[#1a1a1a]'
                   }`}
                 >
-                  {filter}
+                  {tab}
                 </button>
               ))}
             </div>
             <div className="flex items-center gap-2">
               <select
-                value={sortOrder}
-                onChange={(e) => setSortOrder(e.target.value as 'recent' | 'oldest')}
+                value={filters.sortOrder}
+                onChange={(e) => setFilter('sortOrder', e.target.value as 'recent' | 'oldest')}
                 className="bg-[#1a1a1a] text-[#888] text-sm px-3 py-2 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]"
               >
                 <option value="recent">Mais recentes</option>
                 <option value="oldest">Mais antigos</option>
               </select>
               <button
-                onClick={() => setShowFilters(!showFilters)}
-                className={`p-2 rounded-lg transition-colors ${showFilters ? 'bg-[#1DB954] text-[#121212]' : 'text-[#888] hover:bg-[#1a1a1a]'}`}
+                onClick={() => setFilter('showFilters', !filters.showFilters)}
+                className={`p-2 rounded-lg transition-colors ${filters.showFilters ? 'bg-[#1DB954] text-[#121212]' : 'text-[#888] hover:bg-[#1a1a1a]'}`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
@@ -159,7 +121,7 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {showFilters && (
+          {filters.showFilters && (
             <div className="p-4 border-b border-[#222] bg-[#1a1a1a]">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
@@ -173,8 +135,8 @@ export default function Dashboard() {
                 <div className="flex items-center gap-2">
                   <span className="text-[#888] text-sm">Status:</span>
                   <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
+                    value={filters.statusFilter}
+                    onChange={(e) => setFilter('statusFilter', e.target.value)}
                     className="bg-[#141414] text-white text-sm px-3 py-1.5 rounded-lg border border-[#222] focus:outline-none focus:border-[#1DB954]"
                   >
                     <option value="Todos">Todos</option>
@@ -193,7 +155,7 @@ export default function Dashboard() {
           )}
 
           <div className="divide-y divide-[#222]">
-            {filteredApplications.map((app) => (
+            {filtered.map((app) => (
               <div
                 key={app.id}
                 onClick={() => navigate(`/candidatura/${app.id}`)}
