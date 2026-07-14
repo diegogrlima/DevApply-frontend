@@ -1,36 +1,29 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApplications } from '../contexts/ApplicationsContext'
+import { useApplicationForm } from '../hooks/useApplicationForm'
 
 const companyColors = ['#820AD1', '#EA1D2C', '#0066CC', '#1DB954', '#F59E0B', '#8B5CF6', '#EC4899', '#06B6D4']
 
 export default function NewApplication() {
   const navigate = useNavigate()
   const { addApplication } = useApplications()
-  const [company, setCompany] = useState('')
-  const [role, setRole] = useState('')
-  const [salary, setSalary] = useState('')
-  const [location, setLocation] = useState('')
-  const [type, setType] = useState('CLT')
-  const [description, setDescription] = useState('')
-  const [link, setLink] = useState('')
-  const [logo, setLogo] = useState<string | null>(null)
+  const { form, handleChange } = useApplicationForm()
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
-      reader.onloadend = () => setLogo(reader.result as string)
+      reader.onloadend = () => handleChange('logo', reader.result as string)
       reader.readAsDataURL(file)
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const randomColor = companyColors[Math.floor(Math.random() * companyColors.length)]
-    addApplication({ company, role, salary, location, type, description, link, logo, color: randomColor })
-    navigate('/')
-  }
+   const handleSubmit = (e: React.FormEvent) => {
+      e.preventDefault()
+      const randomColor = companyColors[Math.floor(Math.random() * companyColors.length)]
+           addApplication({ ...form, color: randomColor })
+      navigate('/')
+    }
 
   return (
     <div className="ml-64 min-h-screen bg-[#0a0a0a] p-8 w-full">
@@ -62,8 +55,8 @@ export default function NewApplication() {
                 <input
                   id="company"
                   type="text"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
+                  value={form.company}
+                  onChange={(e) => handleChange('company', e.target.value)}
                   required
                   className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]"
                   placeholder="Ex: Nubank"
@@ -79,8 +72,8 @@ export default function NewApplication() {
                     htmlFor="logo-upload"
                     className="flex flex-col items-center justify-center w-24 h-24 bg-[#1a1a1a] border border-dashed border-[#333] rounded-xl cursor-pointer hover:border-[#1DB954] transition-colors"
                   >
-                    {logo ? (
-                      <img src={logo} alt="Logo" className="w-full h-full object-cover rounded-xl" />
+                    {form.logo ? (
+                      <img src={form.logo} alt="Logo" className="w-full h-full object-cover rounded-xl" />
                     ) : (
                       <>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#666" className="w-8 h-8">
@@ -97,10 +90,10 @@ export default function NewApplication() {
                       className="hidden"
                     />
                   </label>
-                  {logo && (
+                  {form.logo && (
                     <button
                       type="button"
-                      onClick={() => setLogo(null)}
+                      onClick={() => handleChange('logo', null)}
                       className="text-red-400 text-sm hover:underline"
                     >
                       Remover
@@ -122,8 +115,8 @@ export default function NewApplication() {
                 <input
                   id="role"
                   type="text"
-                  value={role}
-                  onChange={(e) => setRole(e.target.value)}
+                  value={form.role}
+                  onChange={(e) => handleChange('role', e.target.value)}
                   required
                   className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]"
                   placeholder="Ex: Desenvolvedor Backend"
@@ -138,8 +131,8 @@ export default function NewApplication() {
                   <input
                     id="salary"
                     type="text"
-                    value={salary}
-                    onChange={(e) => setSalary(e.target.value)}
+                    value={form.salary}
+                    onChange={(e) => handleChange('salary', e.target.value)}
                     className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]"
                     placeholder="Ex: R$ 5.000 - R$ 8.000"
                   />
@@ -151,8 +144,8 @@ export default function NewApplication() {
                   <input
                     id="location"
                     type="text"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
+                    value={form.location}
+                    onChange={(e) => handleChange('location', e.target.value)}
                     className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]"
                     placeholder="Ex: Remoto"
                   />
@@ -165,8 +158,8 @@ export default function NewApplication() {
                 </label>
                 <select
                   id="type"
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
+                  value={form.type}
+                  onChange={(e) => handleChange('type', e.target.value)}
                   className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]"
                 >
                   <option value="CLT">CLT</option>
@@ -183,8 +176,8 @@ export default function NewApplication() {
                 <input
                   id="link"
                   type="url"
-                  value={link}
-                  onChange={(e) => setLink(e.target.value)}
+                  value={form.link}
+                  onChange={(e) => handleChange('link', e.target.value)}
                   className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]"
                   placeholder="https://..."
                 />
@@ -196,8 +189,8 @@ export default function NewApplication() {
                 </label>
                 <textarea
                   id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  value={form.description}
+                  onChange={(e) => handleChange('description', e.target.value)}
                   rows={4}
                   className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954] resize-none"
                   placeholder="Descreva as principais atividades e requisitos..."

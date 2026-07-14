@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useApplications } from '../contexts/ApplicationsContext'
 import { stages, getStageColor } from '../constants/stages'
+import { useApplicationForm } from '../hooks/useApplicationForm'
 
 export default function ApplicationDetails() {
   const { id } = useParams()
@@ -11,12 +12,7 @@ export default function ApplicationDetails() {
   const app = applications.find((a) => a.id === Number(id))
 
   const [isEditing, setIsEditing] = useState(false)
-  const [editCompany, setEditCompany] = useState('')
-  const [editRole, setEditRole] = useState('')
-  const [editSalary, setEditSalary] = useState('')
-  const [editLocation, setEditLocation] = useState('')
-  const [editType, setEditType] = useState('')
-  const [editDescription, setEditDescription] = useState('')
+  const { form, handleChange, reset } = useApplicationForm()
 
   const [newNote, setNewNote] = useState('')
   const [showStatusModal, setShowStatusModal] = useState(false)
@@ -37,23 +33,27 @@ export default function ApplicationDetails() {
   }
 
   const startEdit = () => {
-    setEditCompany(app.company)
-    setEditRole(app.role)
-    setEditSalary(app.salary)
-    setEditLocation(app.location)
-    setEditType(app.type)
-    setEditDescription(app.description)
+    reset({
+      company: app.company,
+      role: app.role,
+      salary: app.salary,
+      location: app.location,
+      type: app.type,
+      description: app.description,
+      link: app.link,
+      logo: app.logo,
+    })
     setIsEditing(true)
   }
 
   const saveEdit = () => {
     updateApplication(app.id, {
-      company: editCompany,
-      role: editRole,
-      salary: editSalary,
-      location: editLocation,
-      type: editType,
-      description: editDescription,
+      company: form.company,
+      role: form.role,
+      salary: form.salary,
+      location: form.location,
+      type: form.type,
+      description: form.description,
     })
     setIsEditing(false)
   }
@@ -125,25 +125,25 @@ export default function ApplicationDetails() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-[#888] mb-1">Empresa</label>
-                  <input value={editCompany} onChange={(e) => setEditCompany(e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
+                  <input value={form.company} onChange={(e) => handleChange('company', e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
                 </div>
                 <div>
                   <label className="block text-sm text-[#888] mb-1">Cargo</label>
-                  <input value={editRole} onChange={(e) => setEditRole(e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
+                  <input value={form.role} onChange={(e) => handleChange('role', e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm text-[#888] mb-1">Salário</label>
-                  <input value={editSalary} onChange={(e) => setEditSalary(e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
+                  <input value={form.salary} onChange={(e) => handleChange('salary', e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
                 </div>
                 <div>
                   <label className="block text-sm text-[#888] mb-1">Localização</label>
-                  <input value={editLocation} onChange={(e) => setEditLocation(e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
+                  <input value={form.location} onChange={(e) => handleChange('location', e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]" />
                 </div>
                 <div>
                   <label className="block text-sm text-[#888] mb-1">Contrato</label>
-                  <select value={editType} onChange={(e) => setEditType(e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]">
+                  <select value={form.type} onChange={(e) => handleChange('type', e.target.value)} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]">
                     <option value="CLT">CLT</option>
                     <option value="PJ">PJ</option>
                     <option value="Estágio">Estágio</option>
@@ -153,7 +153,7 @@ export default function ApplicationDetails() {
               </div>
               <div>
                 <label className="block text-sm text-[#888] mb-1">Descrição</label>
-                <textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows={3} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954] resize-none" />
+                <textarea value={form.description} onChange={(e) => handleChange('description', e.target.value)} rows={3} className="w-full px-4 py-2 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954] resize-none" />
               </div>
               <div className="flex gap-3">
                 <button onClick={() => setIsEditing(false)} className="px-4 py-2 bg-[#1a1a1a] text-white text-sm rounded-lg hover:bg-[#222] border border-[#333]">Cancelar</button>
