@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useApplications } from '../contexts/ApplicationsContext'
 import { getStageColor } from '../constants/stages'
+import { useRequiredParam } from '../hooks/useRequiredParam'
 import EditForm from '../components/application-details/EditForm'
 import TimelineSection from '../components/application-details/TimelineSection'
 import NotesSection from '../components/application-details/NotesSection'
@@ -9,7 +10,7 @@ import StatusModal from '../components/application-details/StatusModal'
 import DeleteConfirm from '../components/application-details/DeleteConfirm'
 
 export default function ApplicationDetails() {
-  const { id } = useParams()
+  const id = useRequiredParam('id')
   const navigate = useNavigate()
   const { applications, deleteApplication, updateApplication, addNote, deleteNote, updateStatus } = useApplications()
 
