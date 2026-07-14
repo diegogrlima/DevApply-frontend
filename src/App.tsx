@@ -7,69 +7,23 @@ import ApplicationDetails from './pages/ApplicationDetails'
 import NewApplication from './pages/NewApplication'
 import Perfil from './pages/Perfil'
 import Emails from './pages/Emails'
-import Sidebar from './components/Sidebar'
+
+import Layout from './components/Layout'
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route
-        path="/"
-        element={
-          <div className="flex">
-            <Sidebar />
-            <Dashboard />
-          </div>
-        }
-      />
-      <Route
-        path="/candidaturas"
-        element={
-          <div className="flex">
-            <Sidebar />
-            <Candidaturas />
-          </div>
-        }
-      />
-      <Route
-        path="/candidatura/:id"
-        element={
-          <div className="flex">
-            <Sidebar />
-            <ApplicationDetails />
-          </div>
-        }
-      />
-      <Route
-        path="/nova-candidatura"
-        element={
-          <div className="flex">
-            <Sidebar />
-            <NewApplication />
-          </div>
-        }
-      />
-      <Route
-        path="/perfil"
-        element={
-          <div className="flex">
-            <Sidebar />
-            <Perfil />
-          </div>
-        }
-      />
-      <Route
-        path="/emails"
-        element={
-          <div className="flex">
-            <Sidebar />
-            <Emails />
-          </div>
-        }
-      />
+      <Route element={<Layout />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/candidaturas" element={<Candidaturas />} />
+        <Route path="/candidatura/:id" element={<ApplicationDetails />} />
+        <Route path="/nova-candidatura" element={<NewApplication />} />
+        <Route path="/perfil" element={<Perfil />} />
+        <Route path="/emails" element={<Emails />} />
+      </Route>
     </Routes>
   )
 }
-
 export default App
