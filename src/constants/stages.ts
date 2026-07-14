@@ -25,3 +25,16 @@ export const stageColors: Record<Stage, string> = {
 export function getStageColor(stage: string): string {
   return stageColors[stage as Stage] ?? 'bg-[#333] text-[#888]'
 }
+
+const terminalStages: Stage[] = ['Aprovada', 'Rejeitada']
+
+export function getNextStages(currentStage: string): Stage[] {
+  const currentIndex = stages.indexOf(currentStage as Stage)
+  if (currentIndex === -1) return []
+
+  const forwardStages = stages
+    .slice(currentIndex + 1)
+    .filter((s) => !terminalStages.includes(s))
+
+  return [...forwardStages, ...terminalStages]
+}

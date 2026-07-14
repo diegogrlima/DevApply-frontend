@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { stages } from '../../constants/stages'
+import { getNextStages } from '../../constants/stages'
 
 interface StatusModalProps {
   currentStage: string
@@ -8,7 +8,8 @@ interface StatusModalProps {
 }
 
 export default function StatusModal({ currentStage, onConfirm, onCancel }: StatusModalProps) {
-  const [newStage, setNewStage] = useState(currentStage)
+  const availableStages = getNextStages(currentStage)
+  const [newStage, setNewStage] = useState(availableStages[0])
 
   const handleConfirm = () => {
     const status = newStage === 'Aprovada' || newStage === 'Rejeitada' ? 'Finalizada' : 'Em andamento'
@@ -23,7 +24,7 @@ export default function StatusModal({ currentStage, onConfirm, onCancel }: Statu
           <div>
             <label className="block text-sm text-[#888] mb-2">Etapa</label>
             <select value={newStage} onChange={(e) => setNewStage(e.target.value)} className="w-full px-4 py-2.5 bg-[#1a1a1a] border border-[#222] text-white rounded-lg focus:outline-none focus:border-[#1DB954]">
-              {stages.map((s) => (
+              {availableStages.map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
             </select>
