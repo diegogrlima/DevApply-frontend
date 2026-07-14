@@ -1,18 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useApplications } from '../contexts/ApplicationsContext'
-
-const stageColors: Record<string, string> = {
-  'Entrevista Técnica': 'bg-emerald-500/20 text-emerald-400',
-  'Teste Técnico': 'bg-amber-500/20 text-amber-400',
-  'Em Análise': 'bg-blue-500/20 text-blue-400',
-  'Rejeitada': 'bg-[#333] text-[#888]',
-  'Entrevista RH': 'bg-emerald-500/20 text-emerald-400',
-  'Currículo Enviado': 'bg-[#333] text-[#888]',
-  'Aprovada': 'bg-emerald-500/20 text-emerald-400',
-}
-
-const stages = ['Currículo Enviado', 'Em Análise', 'Teste Técnico', 'Entrevista Técnica', 'Entrevista RH', 'Proposta', 'Aprovada', 'Rejeitada']
+import { stages, getStageColor } from '../constants/stages'
 
 export default function ApplicationDetails() {
   const { id } = useParams()
@@ -115,7 +104,7 @@ export default function ApplicationDetails() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className={`px-4 py-2 rounded-full text-sm font-medium ${stageColors[app.stage] || 'bg-[#333] text-[#888]'}`}>
+            <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStageColor(app.stage)}`}>
               {app.stage}
             </span>
           </div>

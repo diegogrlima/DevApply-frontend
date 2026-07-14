@@ -1,15 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApplications } from '../contexts/ApplicationsContext'
-
-const stageColors: Record<string, string> = {
-  'Entrevista Técnica': 'bg-emerald-500/20 text-emerald-400',
-  'Teste Técnico': 'bg-amber-500/20 text-amber-400',
-  'Em Análise': 'bg-blue-500/20 text-blue-400',
-  'Rejeitada': 'bg-[#333] text-[#888]',
-  'Entrevista RH': 'bg-emerald-500/20 text-emerald-400',
-  'Currículo Enviado': 'bg-[#333] text-[#888]',
-}
+import { getStageColor } from '../constants/stages'
 
 export default function Candidaturas() {
   const { applications } = useApplications()
@@ -73,7 +65,7 @@ export default function Candidaturas() {
                   <p className="text-white font-medium">{app.company}</p>
                   <p className="text-[#666] text-sm truncate">{app.role}</p>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${stageColors[app.stage] || 'bg-[#333] text-[#888]'}`}>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStageColor(app.stage)}`}>
                   {app.stage}
                 </span>
                 <div className="text-right w-32">
